@@ -58,10 +58,10 @@ def create_dataset():
             v10m  = data_v10m.get(la, lo, time)
 
 
-            if pblh is None or ps is None or qv10m is None or t2m is None or u10m is None or v10m is None:
+            if aod is None or pblh is None or ps is None or qv10m is None or t2m is None or u10m is None or v10m is None:
                 continue
 
-            input_list.append(np.array([pblh, ps, qv10m, t2m, math.sqrt(u10m ** 2 + v10m ** 2)]))
+            input_list.append(np.array([aod, pblh, ps, qv10m, t2m, math.sqrt(u10m ** 2 + v10m ** 2)]))
             output_list.append(np.array([pm25]))
 
     all_input  = np.stack(input_list)
