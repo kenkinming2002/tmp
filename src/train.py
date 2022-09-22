@@ -61,6 +61,22 @@ class Model:
                 self.layer3.train(learning_rate)
                 self.layer4.train(learning_rate)
 
+    def test(self, testing_input, testing_output):
+        value = testing_input
+
+        value = self.layer1.forward(value)
+        value = self.layer2.forward(value)
+        value = self.layer3.forward(value)
+        value = self.layer4.forward(value)
+
+        print(f"Example: prediction = {value[1]}, output={testing_output[1]}")
+
+        mean = testing_output.mean()
+        ss_res = np.square(testing_output - value).sum()
+        ss_tot = np.square(testing_output - mean).sum()
+        r2 = 1 - ss_res / ss_tot
+        print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
+
 with open('dataset', 'rb') as f:
     all_input  = np.load(f, allow_pickle = True)
     all_output = np.load(f, allow_pickle = True)
@@ -82,5 +98,8 @@ for i in range(10):
     testing_input  = all_input [i * sub_count: (i+1)*sub_count]
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
     model = Model()
-    model.train(10, 32, 0.005, training_input, training_output)
+
+    model.test(testing_input, testing_output)
+    model.train(10, 32, 0.05, training_input, training_output)
+    model.test(testing_input, testing_output)
 
