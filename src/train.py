@@ -14,9 +14,12 @@ class Layer:
     def forward(self, input_value):
         self.saved_input1 = input_value
         self.saved_input2 = np.matmul(self.saved_input1, self.weight) + self.bias
-        return np.tanh(self.saved_input2)
+        return 1.0 / (1.0 + np.exp(-self.saved_input2))
 
     def backward(self, output_gradient):
+        tmp = np.exp(-self.saved_input2)
+        output_gradient = output_gradient / ((1+tmp)*(1+1/tmp))
+
         output_gradient      = output_gradient / np.square(np.cosh(self.saved_input2))
         input_gradient       = np.matmul(output_gradient, self.weight.transpose())
         self.weight_gradient = np.matmul(self.saved_input1.transpose(), output_gradient)
