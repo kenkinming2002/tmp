@@ -62,48 +62,52 @@ class Model:
         self.layer3 = Layer(8, 4)
         self.layer4 = Layer(4, 1)
 
-    def train(self, epoch, batch_size, learning_rate, training_input, training_output):
-        size        = len(training_input)
-        batch_count = int(size / batch_size)
-        for k in range(epoch):
-            for i in tqdm(range(batch_count), desc=f"Training(epoch={k})"):
-                batch_input  = training_input[i*batch_size:(i+1)*batch_size]
-                batch_output = training_output[i*batch_size:(i+1)*batch_size]
+    def forward(self, input_value):
+        output_value = input_value
+        output_value = self.layer1.forward(output_value)
+        output_value = self.layer2.forward(output_value)
+        output_value = self.layer3.forward(output_value)
+        output_value = self.layer4.forward(output_value)
+        return output_value
 
-                value = batch_input
+    def backward(self, output_gradient):
+        input_gradient = output_gradient
+        input_gradient = self.layer4.backward(input_gradient)
+        input_gradient = self.layer3.backward(input_gradient)
+        input_gradient = self.layer2.backward(input_gradient)
+        input_gradient = self.layer1.backward(input_gradient)
+        return input_gradient
 
-                value = self.layer1.forward(value)
-                value = self.layer2.forward(value)
-                value = self.layer3.forward(value)
-                value = self.layer4.forward(value)
+    def train(self, learning_rate):
+        self.layer1.train(learning_rate)
+        self.layer2.train(learning_rate)
+        self.layer3.train(learning_rate)
+        self.layer4.train(learning_rate)
 
-                gradient = (value - batch_output) * 2
+def train(model, epoch, batch_size, learning_rate, training_input, training_output):
+    size        = len(training_input)
+    batch_count = int(size / batch_size)
+    for k in range(epoch):
+        for i in tqdm(range(batch_count), desc=f"Training(epoch={k})"):
+            batch_input  = training_input[i*batch_size:(i+1)*batch_size]
+            batch_output = training_output[i*batch_size:(i+1)*batch_size]
 
-                gradient = self.layer4.backward(gradient)
-                gradient = self.layer3.backward(gradient)
-                gradient = self.layer2.backward(gradient)
-                gradient = self.layer1.backward(gradient)
+            batch_prediction = model.forward(batch_input)
 
-                self.layer1.train(learning_rate)
-                self.layer2.train(learning_rate)
-                self.layer3.train(learning_rate)
-                self.layer4.train(learning_rate)
+            batch_output_gradient = (batch_prediction - batch_output) * 2
+            batch_input_gradient  = model.backward(batch_output_gradient)
 
-    def test(self, testing_input, testing_output):
-        value = testing_input
+            model.train(learning_rate)
 
-        value = self.layer1.forward(value)
-        value = self.layer2.forward(value)
-        value = self.layer3.forward(value)
-        value = self.layer4.forward(value)
+def test(model, testing_input, testing_output):
+    prediction = model.forward(testing_input)
+    for i in range(5):
+        print(f"Example: prediction = {prediction[i]}, output={testing_output[i]}")
 
-        for i in range(5):
-            print(f"Example: prediction = {value[i]}, output={testing_output[i]}")
-
-        ss_res = np.square(testing_output - value).sum()
-        ss_tot = np.square(testing_output - testing_output.mean()).sum()
-        r2 = 1 - ss_res / ss_tot
-        print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
+    ss_res = np.square(testing_output - prediction).sum()
+    ss_tot = np.square(testing_output - testing_output.mean()).sum()
+    r2 = 1 - ss_res / ss_tot
+    print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
 # Load
 with open('dataset', 'rb') as f:
@@ -137,16 +141,14 @@ for i in range(10):
     model = Model()
 
     print("Testing on testing data")
-    model.test(testing_input, testing_output)
+    test(model, testing_input, testing_output)
     print("Testing on training data")
-    model.test(training_input, training_output)
+    test(model, training_input, training_output)
 
-    model.train(20, 64, 0.05, training_input, training_output)
+    train(model, 20, 64, 0.05, training_input, training_output)
 
     print("Testing on testing data")
-    model.test(testing_input, testing_output)
+    test(model, testing_input, testing_output)
     print("Testing on training data")
-    model.test(training_input, training_output)
-
-    sys.exit(0)
+    test(model, training_input, training_output)
 
