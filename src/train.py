@@ -101,7 +101,7 @@ def train(model, epoch, batch_size, learning_rate, training_input, training_outp
 def test(model, testing_input, testing_output):
     prediction = model.forward(testing_input)
     for i in range(5):
-        print(f"Example: prediction = {prediction[i]}, output={testing_output[i]}")
+        print(f"Example: input={testing_input[i]}, prediction = {prediction[i]}, output={testing_output[i]}")
 
     ss_res = np.square(testing_output - prediction).sum()
     ss_tot = np.square(testing_output - testing_output.mean()).sum()
@@ -113,22 +113,37 @@ with open('dataset', 'rb') as f:
     all_input  = np.load(f, allow_pickle = True)
     all_output = np.load(f, allow_pickle = True)
 
-print(all_input.shape)
-print(all_output.shape)
-
-#all_input  = np.random.uniform(-0.3, 0.3, (10000, 6))
+#all_input  = np.random.uniform(-0.3, 0.3, (50000, 6))
 #all_output = np.sum(all_input, 1, keepdims = True)
 
 count = all_output.shape[0]
 
+print(all_input.shape)
+print(all_output.shape)
+
+print(np.count_nonzero(np.isnan(all_input)))
+print(np.count_nonzero(np.isnan(all_output)))
+
 # Shuffle
-tmp = np.random.permutation(count)
-all_input  = all_input[tmp]
-all_output = all_output[tmp]
+#tmp = np.random.permutation(count)
+#all_input  = all_input[tmp]
+#all_output = all_output[tmp]
+
+# Debug
+print(f"Before normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
+print(f"Before normalization - Output: mean = {np.mean(all_output, axis=0)}, std = {np.std(all_output, axis=0)}")
 
 # Normalize
-all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.sqrt(np.var(all_input,  axis=0))
-all_output = (all_output - np.mean(all_output, axis=0)) / np.sqrt(np.var(all_output, axis=0))
+#all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.std(all_input,  axis=0)
+all_input  = (all_input  - np.amin(all_input,  axis=0)) / (np.amax(all_input,  axis=0) - np.amin(all_input,  axis=0)) * 2.0 - 1.0
+
+#all_output = (all_output - np.mean(all_output, axis=0)) / np.std(all_output, axis=0)
+#all_output = (all_output - np.amin(all_output, axis=0)) / (np.amax(all_output, axis=0) - np.amin(all_output, axis=0)) * 2.0 - 1.0
+all_output = (all_output - np.median(all_output, axis=0)) / np.std(all_output, axis=0)
+
+# Debug
+print(f"After normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
+print(f"After normalization - Output: mean = {np.mean(all_output, axis=0)}, std = {np.std(all_output, axis=0)}")
 
 sub_count = int(count / 10)
 for i in range(10):
@@ -144,7 +159,12 @@ for i in range(10):
     print("Testing on training data")
     test(model, training_input, training_output)
 
-    train(model, 20, 16, 0.005, training_input, training_output)
+    for i in range(5):
+        train(model, 1, 4, 0.001, training_input, training_output)
+        print("During training - Testing on testing data")
+        test(model, testing_input, testing_output)
+        print("During training - Testing on training data")
+        test(model, training_input, training_output)
 
     print("Testing on testing data")
     test(model, testing_input, testing_output)
