@@ -97,27 +97,30 @@ class Model:
         value = self.layer3.forward(value)
         value = self.layer4.forward(value)
 
-        print(f"Example: prediction = {value[1]}, output={testing_output[1]}")
+        for i in range(5):
+            print(f"Example: prediction = {value[i]}, output={testing_output[i]}")
 
-        mean = testing_output.mean()
         ss_res = np.square(testing_output - value).sum()
-        ss_tot = np.square(testing_output - mean).sum()
+        ss_tot = np.square(testing_output - testing_output.mean()).sum()
         r2 = 1 - ss_res / ss_tot
         print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
+# Load
 with open('dataset', 'rb') as f:
     all_input  = np.load(f, allow_pickle = True)
     all_output = np.load(f, allow_pickle = True)
 
+count = all_output.shape[0]
+
 # Shuffle
-np.random.shuffle(all_input)
-np.random.shuffle(all_output)
+tmp = np.random.permutation(count)
+all_input  = all_input[tmp]
+all_output = all_output[tmp]
 
 # Normalize
 all_input = all_input * np.array([1, 1/2000, 1/200000, 100, 1/500, 1/10])
 all_output /= 200
 
-count = all_output.shape[0]
 sub_count = int(count / 10)
 for i in range(10):
     training_input  = np.concatenate((all_input [:i*sub_count], all_input [(i+1)* sub_count:]))
@@ -127,7 +130,15 @@ for i in range(10):
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
     model = Model()
 
+    print("Testing on testing data")
     model.test(testing_input, testing_output)
-    model.train(10, 32, 0.05, training_input, training_output)
+    print("Testing on training data")
+    model.test(training_input, training_output)
+
+    model.train(100, 32, 0.005, training_input, training_output)
+
+    print("Testing on testing data")
     model.test(testing_input, testing_output)
+    print("Testing on training data")
+    model.test(training_input, training_output)
 
