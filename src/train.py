@@ -6,29 +6,54 @@ import sys
 import math
 import numpy as np
 
-class Layer:
+class DenseLayer:
     def __init__(self, input_size, output_size):
         self.weight = np.random.normal(0, math.sqrt(2.0/(input_size + output_size)), (input_size, output_size))
         self.bias   = np.random.normal(0, 0.1, output_size)
 
     def forward(self, input_value):
-        self.saved_input1 = input_value
-        self.saved_input2 = np.matmul(self.saved_input1, self.weight) + self.bias
-        return 1.0 / (1.0 + np.exp(-self.saved_input2))
+        self.saved_input = input_value
+        return np.matmul(self.saved_input, self.weight) + self.bias
 
     def backward(self, output_gradient):
-        tmp = np.exp(-self.saved_input2)
-        output_gradient = output_gradient / ((1+tmp)*(1+1/tmp))
-
-        output_gradient      = output_gradient / np.square(np.cosh(self.saved_input2))
         input_gradient       = np.matmul(output_gradient, self.weight.transpose())
-        self.weight_gradient = np.matmul(self.saved_input1.transpose(), output_gradient)
+        self.weight_gradient = np.matmul(self.saved_input.transpose(), output_gradient)
         self.bias_gradient   = output_gradient.sum()
         return input_gradient
 
     def train(self, learning_rate):
         self.weight -= learning_rate * self.weight_gradient
         self.bias   -= learning_rate * self.bias_gradient
+
+class ActivationLayer:
+    def __init__(self):
+        pass
+
+    def forward(self, input_value):
+        self.saved_input = input_value
+        return 1.0 / (1.0 + np.exp(-self.saved_input))
+
+    def backward(self, output_gradient):
+        tmp = np.exp(-self.saved_input)
+        return output_gradient / ((1+tmp)*(1+1/tmp))
+
+    def train(self, learning_rate):
+        pass
+
+class Layer:
+    def __init__(self, input_size, output_size):
+        self.dense      = DenseLayer(input_size, output_size)
+        self.activation = ActivationLayer()
+
+    def forward(self, input_value):
+        return self.activation.forward(self.dense.forward(input_value))
+
+    def backward(self, output_gradient):
+        return self.dense.backward(self.activation.backward(output_gradient))
+
+    def train(self, learning_rate):
+        self.dense.train(learning_rate)
+        self.activation.train(learning_rate)
 
 class Model:
     def __init__(self):
@@ -90,7 +115,7 @@ np.random.shuffle(all_output)
 
 # Normalize
 all_input = all_input * np.array([1, 1/2000, 1/200000, 100, 1/500, 1/10])
-all_output /= 100
+all_output /= 200
 
 count = all_output.shape[0]
 sub_count = int(count / 10)
