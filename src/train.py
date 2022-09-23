@@ -18,7 +18,7 @@ class DenseLayer:
     def backward(self, output_gradient):
         input_gradient       = np.matmul(output_gradient, self.weight.transpose())
         self.weight_gradient = np.matmul(self.saved_input.transpose(), output_gradient)
-        self.bias_gradient   = output_gradient.sum()
+        self.bias_gradient   = np.sum(output_gradient, 0)
         return input_gradient
 
     def train(self, learning_rate):
@@ -110,6 +110,12 @@ with open('dataset', 'rb') as f:
     all_input  = np.load(f, allow_pickle = True)
     all_output = np.load(f, allow_pickle = True)
 
+print(all_input.shape)
+print(all_output.shape)
+
+all_input  = np.random.uniform(0, 0.1, (10000, 6))
+all_output = np.sum(all_input, 1, keepdims = True)
+
 count = all_output.shape[0]
 
 # Shuffle
@@ -118,8 +124,8 @@ all_input  = all_input[tmp]
 all_output = all_output[tmp]
 
 # Normalize
-all_input = all_input * np.array([1, 1/2000, 1/200000, 100, 1/500, 1/10])
-all_output /= 200
+all_input  /= np.amax(all_input, axis=0)
+all_output /= np.amax(all_output)
 
 sub_count = int(count / 10)
 for i in range(10):
@@ -135,10 +141,12 @@ for i in range(10):
     print("Testing on training data")
     model.test(training_input, training_output)
 
-    model.train(100, 32, 0.005, training_input, training_output)
+    model.train(20, 64, 0.05, training_input, training_output)
 
     print("Testing on testing data")
     model.test(testing_input, testing_output)
     print("Testing on training data")
     model.test(training_input, training_output)
+
+    sys.exit(0)
 
