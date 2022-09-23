@@ -1,6 +1,8 @@
 from base import *
 from tqdm import tqdm
 
+import math
+
 class AOD:
     def __init__(self):
         def parse_time(time_str):
@@ -40,7 +42,8 @@ class AOD:
         if aod_data.size == 0:
             return None
 
-        # TODO: Use a proper distance function
-        score = np.absolute(la_data - la) + np.absolute(lo_data - lo)
+        tmp1 =                                np.square(np.sin((la_data - la) / 2.0))
+        tmp2 = np.cos(la_data) * np.cos(la) * np.square(np.sin((lo_data - lo) / 2.0))
+        score = np.arcsin(np.sqrt(tmp1 + tmp2))
         i = np.argmin(score)
         return aod_data[i]
