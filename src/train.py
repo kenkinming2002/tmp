@@ -31,11 +31,10 @@ class ActivationLayer:
 
     def forward(self, input_value):
         self.saved_input = input_value
-        return 1.0 / (1.0 + np.exp(-self.saved_input))
+        return np.tanh(input_value)
 
     def backward(self, output_gradient):
-        tmp = np.exp(-self.saved_input)
-        return output_gradient / ((1+tmp)*(1+1/tmp))
+        return output_gradient / np.square(np.cosh(self.saved_input))
 
     def train(self, learning_rate):
         pass
@@ -117,8 +116,8 @@ with open('dataset', 'rb') as f:
 print(all_input.shape)
 print(all_output.shape)
 
-all_input  = np.random.uniform(0, 0.1, (10000, 6))
-all_output = np.sum(all_input, 1, keepdims = True)
+#all_input  = np.random.uniform(-0.3, 0.3, (10000, 6))
+#all_output = np.sum(all_input, 1, keepdims = True)
 
 count = all_output.shape[0]
 
@@ -128,8 +127,8 @@ all_input  = all_input[tmp]
 all_output = all_output[tmp]
 
 # Normalize
-all_input  /= np.amax(all_input, axis=0)
-all_output /= np.amax(all_output)
+all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.sqrt(np.var(all_input,  axis=0))
+all_output = (all_output - np.mean(all_output, axis=0)) / np.sqrt(np.var(all_output, axis=0))
 
 sub_count = int(count / 10)
 for i in range(10):
@@ -145,10 +144,11 @@ for i in range(10):
     print("Testing on training data")
     test(model, training_input, training_output)
 
-    train(model, 20, 64, 0.05, training_input, training_output)
+    train(model, 20, 16, 0.005, training_input, training_output)
 
     print("Testing on testing data")
     test(model, testing_input, testing_output)
     print("Testing on training data")
     test(model, training_input, training_output)
+    sys.exit(1)
 
