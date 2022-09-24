@@ -35,6 +35,9 @@ if extension == '.mat':
     print(data.dtype)
     print(data.shape)
     print(data)
+
+    tmp = data[~np.isnan(data)]
+    print(f"info: min = {np.min(tmp)}, max = {np.max(tmp)}")
 elif extension == '.nc':
     f = Dataset(filename)
     print(f)

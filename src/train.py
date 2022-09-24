@@ -4,7 +4,9 @@ from tqdm import tqdm
 
 import sys
 import math
+
 import numpy as np
+import matplotlib.pyplot as plt
 
 class DenseLayer:
     def __init__(self, input_size, output_size):
@@ -132,6 +134,11 @@ print(np.count_nonzero(np.isnan(all_output)))
 # Debug
 print(f"Before normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
 print(f"Before normalization - Output: mean = {np.mean(all_output, axis=0)}, std = {np.std(all_output, axis=0)}")
+
+fig, ax = plt.subplots()
+print(np.max(all_output))
+ax.plot(all_output.ravel())
+plt.show()
 
 # Normalize
 #all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.std(all_input,  axis=0)
