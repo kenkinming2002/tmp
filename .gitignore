@@ -1,6 +1,7 @@
 # created by virtualenv automatically
 *
 !.gitignore
+!README.md
 !requirements.txt
 !src
 !src/*
