@@ -44,6 +44,6 @@ class AOD:
 
         tmp1 =                                np.square(np.sin((la_data - la) / 2.0))
         tmp2 = np.cos(la_data) * np.cos(la) * np.square(np.sin((lo_data - lo) / 2.0))
-        score = np.arcsin(np.sqrt(tmp1 + tmp2))
+        score = np.arcsin(np.sqrt(np.clip(tmp1 + tmp2, 0.0, 1.0)))
         i = np.argmin(score)
         return aod_data[i]
