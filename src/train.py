@@ -139,7 +139,7 @@ for i in range(10):
     test(model, training_input, training_output)
 
     while True:
-        train(model, 1, 1, 0.05, training_input, training_output)
+        train(model, 1, 4, 0.05, training_input, training_output)
         print("During training - Testing on testing data")
         test(model, testing_input, testing_output)
         print("During training - Testing on training data")

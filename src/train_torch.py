@@ -108,7 +108,7 @@ for i in range(10):
     test(model, 128, training_dataset)
 
     while True:
-        train(model, 1, 32, 0.05, training_dataset)
+        train(model, 1, 4, 0.05, training_dataset)
 
         print("Testing on testing data")
         test(model, 128, testing_dataset)

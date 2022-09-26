@@ -6,9 +6,9 @@ with open('dataset', 'rb') as f:
     all_input  = np.load(f, allow_pickle = True)
     all_output = np.load(f, allow_pickle = True)
 
-tmp = np.random.randint(0, all_input.shape[0], 100)
-all_input  = all_input[tmp]
-all_output = all_output[tmp]
+#tmp = np.random.randint(0, all_input.shape[0], 100)
+#all_input  = all_input[tmp]
+#all_output = all_output[tmp]
 
 all_input_mean = np.mean(all_input, axis=0)
 all_input_std  = np.std(all_input, axis=0)
