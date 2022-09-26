@@ -130,17 +130,6 @@ print(np.count_nonzero(np.isnan(all_output)))
 print(f"Before normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
 print(f"Before normalization - Output: mean = {np.mean(all_output, axis=0)}, std = {np.std(all_output, axis=0)}")
 
-# Normalize
-#all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.std(all_input,  axis=0)
-#all_input  = (all_input  - np.amin(all_input,  axis=0)) / (np.amax(all_input,  axis=0) - np.amin(all_input,  axis=0)) * 2.0 - 1.0
-#all_input = (all_input - np.median(all_input, axis=0)) / np.std(all_input, axis=0)
-all_input = (all_input - np.median(all_input, axis=0)) / (np.amax(all_input,  axis=0) - np.amin(all_input,  axis=0))
-
-#all_output = (all_output - np.mean(all_output, axis=0)) / np.std(all_output, axis=0)
-#all_output = (all_output - np.amin(all_output, axis=0)) / (np.amax(all_output, axis=0) - np.amin(all_output, axis=0)) * 2.0 - 1.0
-#all_output = (all_output - np.median(all_output, axis=0)) / np.std(all_output, axis=0)
-all_output = (all_output - np.median(all_output, axis=0)) / (np.amax(all_output, axis=0) - np.amin(all_output, axis=0))
-
 fig, axs = plt.subplots(1, 7)
 
 axs[0].hist(all_input[...,0], bins = 100)
@@ -163,6 +152,17 @@ axs[6].set_title("PM25")
 
 plt.show()
 fig.savefig('fig.png')
+
+# Normalize
+#all_input  = (all_input  - np.mean(all_input,  axis=0)) / np.std(all_input,  axis=0)
+#all_input  = (all_input  - np.amin(all_input,  axis=0)) / (np.amax(all_input,  axis=0) - np.amin(all_input,  axis=0)) * 2.0 - 1.0
+#all_input = (all_input - np.median(all_input, axis=0)) / np.std(all_input, axis=0)
+all_input = (all_input - np.median(all_input, axis=0)) / (np.amax(all_input,  axis=0) - np.amin(all_input,  axis=0))
+
+#all_output = (all_output - np.mean(all_output, axis=0)) / np.std(all_output, axis=0)
+#all_output = (all_output - np.amin(all_output, axis=0)) / (np.amax(all_output, axis=0) - np.amin(all_output, axis=0)) * 2.0 - 1.0
+#all_output = (all_output - np.median(all_output, axis=0)) / np.std(all_output, axis=0)
+all_output = (all_output - np.median(all_output, axis=0)) / (np.amax(all_output, axis=0) - np.amin(all_output, axis=0))
 
 # Debug
 print(f"After normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
