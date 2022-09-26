@@ -126,11 +126,6 @@ print(all_output.shape)
 print(np.count_nonzero(np.isnan(all_input)))
 print(np.count_nonzero(np.isnan(all_output)))
 
-# Shuffle
-#tmp = np.random.permutation(count)
-#all_input  = all_input[tmp]
-#all_output = all_output[tmp]
-
 # Debug
 print(f"Before normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
 print(f"Before normalization - Output: mean = {np.mean(all_output, axis=0)}, std = {np.std(all_output, axis=0)}")
@@ -179,6 +174,16 @@ for i in range(10):
 
     testing_input  = all_input [i * sub_count: (i+1)*sub_count]
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
+
+    # Shuffle
+    tmp = np.random.permutation(training_input.shape[0])
+    training_input  = training_input[tmp]
+    training_output = training_output[tmp]
+
+    tmp = np.random.permutation(testing_input.shape[0])
+    testing_input  = testing_input[tmp]
+    testing_output = testing_output[tmp]
+
     model = Model()
 
     print("Testing on testing data")
@@ -186,8 +191,8 @@ for i in range(10):
     print("Testing on training data")
     test(model, training_input, training_output)
 
-    for i in range(5):
-        train(model, 1, 4, 0.001, training_input, training_output)
+    while True:
+        train(model, 1, 4, 0.05, training_input, training_output)
         print("During training - Testing on testing data")
         test(model, testing_input, testing_output)
         print("During training - Testing on training data")
