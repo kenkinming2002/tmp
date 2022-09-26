@@ -162,6 +162,7 @@ axs[5].set_title("WS")
 axs[6].set_title("PM25")
 
 plt.show()
+fig.savefig('fig.png')
 
 # Debug
 print(f"After normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")

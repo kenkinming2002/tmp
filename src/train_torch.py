@@ -32,9 +32,9 @@ print(np.count_nonzero(np.isnan(all_input)))
 print(np.count_nonzero(np.isnan(all_output)))
 
 # Shuffle
-#tmp = np.random.permutation(count)
-#all_input  = all_input[tmp]
-#all_output = all_output[tmp]
+tmp = np.random.permutation(count)
+all_input  = all_input[tmp]
+all_output = all_output[tmp]
 
 # Debug
 print(f"Before normalization - Input:  mean = {np.mean(all_input,  axis=0)}, std = {np.std(all_input,  axis=0)}")
@@ -144,6 +144,15 @@ for i in range(10):
 
     testing_input  = all_input [i * sub_count: (i+1)*sub_count]
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
+
+    # Shuffle
+    tmp = np.random.permutation(training_input.shape[0])
+    training_input  = training_input[tmp]
+    training_output = training_output[tmp]
+
+    tmp = np.random.permutation(testing_input.shape[0])
+    testing_input  = testing_input[tmp]
+    testing_output = testing_output[tmp]
 
     training_dataset = TensorDataset(torch.Tensor(training_input), torch.Tensor(training_output))
     testing_dataset  = TensorDataset(torch.Tensor(testing_input),  torch.Tensor(testing_output))
