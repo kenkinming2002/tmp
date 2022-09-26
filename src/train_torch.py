@@ -126,11 +126,19 @@ def test(model, batch_size, dataset):
 
     loss_fn = nn.L1Loss()
 
+    ss_res = 0.0
+    ss_tot = 0.0
+
     test_loss = 0
     with torch.no_grad():
         for X, y in dataloader:
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
+            ss_res += (y - pred).square().sum()
+            ss_tot += (y - y.mean()).square().sum()
+
+    r2 = 1 - ss_res / ss_tot
+    print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
     test_loss /= num_batches
     print(f"Test Error: \n Avg loss: {test_loss:>8f} \n")
