@@ -3,6 +3,8 @@ from tqdm import tqdm
 
 import math
 
+AOD_THRESHOLD = 0.01
+
 class AOD:
     def __init__(self):
         def parse_time(time_str):
@@ -39,11 +41,17 @@ class AOD:
         aod_data = self.aod_data[time]
         la_data  = self.la_data[time]
         lo_data  = self.lo_data[time]
-        if aod_data.size == 0:
+
+        ratio = math.pi / 180
+        tmp1 =                                                np.square(np.sin((la_data - la) * ratio / 2.0))
+        tmp2 = np.cos(la_data * ratio) * np.cos(la * ratio) * np.square(np.sin((lo_data - lo) * ratio / 2.0))
+        score = np.arcsin(np.sqrt(np.clip(tmp1 + tmp2, 0.0, 1.0)))
+
+        score = score[score <= AOD_THRESHOLD]
+        if score.size == 0:
             return None
 
-        tmp1 =                                np.square(np.sin((la_data - la) / 2.0))
-        tmp2 = np.cos(la_data) * np.cos(la) * np.square(np.sin((lo_data - lo) / 2.0))
-        score = np.arcsin(np.sqrt(np.clip(tmp1 + tmp2, 0.0, 1.0)))
         i = np.argmin(score)
+        #print(f"Matching aod data with aod={aod_data[i]}, la={la_data[i]}, lo={lo_data[i]} to la={la} and lo={lo}")
+
         return aod_data[i]
