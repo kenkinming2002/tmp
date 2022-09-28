@@ -26,6 +26,18 @@ class DenseLayer:
         self.weight -= learning_rate * self.weight_gradient
         self.bias   -= learning_rate * self.bias_gradient
 
+    def debug(self):
+        fig, axs = plt.subplots(1, 2)
+
+        axs[0].hist(self.weight.ravel(), bins=10)
+        axs[1].hist(self.bias.ravel(),   bins=10)
+
+        axs[0].set_title("weights")
+        axs[1].set_title("bias")
+
+        plt.show()
+
+
 class ActivationLayer:
     def __init__(self):
         pass
@@ -38,6 +50,9 @@ class ActivationLayer:
         return output_gradient / np.square(np.cosh(self.saved_input))
 
     def train(self, learning_rate):
+        pass
+
+    def debug(self):
         pass
 
 class Layer:
@@ -54,6 +69,10 @@ class Layer:
     def train(self, learning_rate):
         self.dense.train(learning_rate)
         self.activation.train(learning_rate)
+
+    def debug(self):
+        self.dense.debug()
+        self.activation.debug()
 
 class Model:
     def __init__(self):
@@ -84,6 +103,12 @@ class Model:
         self.layer3.train(learning_rate)
         self.layer4.train(learning_rate)
 
+    def debug(self):
+        self.layer1.debug()
+        self.layer2.debug()
+        self.layer3.debug()
+        self.layer4.debug()
+
 def train(model, epoch, batch_size, learning_rate, training_input, training_output):
     training_input  = normalize_input(training_input)
     training_output = normalize_output(training_output)
@@ -101,6 +126,8 @@ def train(model, epoch, batch_size, learning_rate, training_input, training_outp
             batch_input_gradient  = model.backward(batch_output_gradient)
 
             model.train(learning_rate)
+
+    model.debug()
 
 def test(title, model, testing_input, testing_output):
     testing_input  = normalize_input(testing_input)
@@ -137,7 +164,7 @@ for i in range(10):
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
 
-    for i in range(500):
+    for i in range(10):
         testing_input,  testing_output  = shuffle(testing_input,  testing_output)
         training_input, training_output = shuffle(training_input, training_output)
 
@@ -147,5 +174,4 @@ for i in range(10):
 
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
-    sys.exit(1)
 
