@@ -8,9 +8,9 @@ AOD_THRESHOLD = 0.01
 class AOD:
     def __init__(self):
         def parse_time(time_str):
-            date = int(time_str[4:7])
+            date = int(time_str[4:7])-1
             hour = int(time_str[8:10])
-            return (date-1) * 24 + hour
+            return date * 24 + hour
 
         aod_list  = [[] for i in range(59 * 24)]
         la_list   = [[] for i in range(59 * 24)]
