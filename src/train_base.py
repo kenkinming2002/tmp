@@ -6,8 +6,8 @@ with open('dataset', 'rb') as f:
     all_input  = np.load(f)
     all_output = np.load(f)
 
-all_input  = np.random.uniform(-0.2, 0.2, (50000, 6))
-all_output = np.sum(all_input, 1, keepdims = True)
+#all_input  = np.random.uniform(-0.2, 0.2, (50000, 6))
+#all_output = np.sum(all_input, 1, keepdims = True)
 
 ##### Shuffling #####
 def shuffle(input_data, output_data):
@@ -22,17 +22,17 @@ all_input, all_output = shuffle(all_input, all_output)
 ##### Normalization #####
 
 ### Unchanged
-def normalize_input(data):
-    return data
-
-def normalize_output(data):
-    return data
-
-def denormalize_input(data):
-    return data
-
-def denormalize_output(data):
-    return data
+#def normalize_input(data):
+#    return data
+#
+#def normalize_output(data):
+#    return data
+#
+#def denormalize_input(data):
+#    return data
+#
+#def denormalize_output(data):
+#    return data
 
 ### Standardize
 #input_mean  = np.mean(all_input, axis=0)
