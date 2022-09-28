@@ -52,7 +52,7 @@ def train(model, epochs, batch_size, learning_rate, dataset):
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-def test(model, batch_size, dataset):
+def test(title, model, batch_size, dataset):
     dataloader = DataLoader(dataset, batch_size = batch_size)
 
     size = len(dataloader.dataset)
@@ -72,7 +72,7 @@ def test(model, batch_size, dataset):
             ss_tot += (y - y.mean()).square().sum()
 
     r2 = 1 - ss_res / ss_tot
-    print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
+    print(f"Testing({title} dataset):ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
     test_loss /= num_batches
     print(f"Test Error: \n Avg loss: {test_loss:>8f} \n")
@@ -102,23 +102,16 @@ for i in range(10):
     # Model
     model = Model()
 
-    print("Testing on testing data")
-    test(model, 128, testing_dataset)
-    print("Testing on training data")
-    test(model, 128, training_dataset)
+    test("testing",  model, 128, testing_dataset)
+    test("training", model, 128, training_dataset)
 
     while True:
         train(model, 1, 4, 0.05, training_dataset)
+        test("testing",  model, 128, testing_dataset)
+        test("training", model, 128, training_dataset)
 
-        print("Testing on testing data")
-        test(model, 128, testing_dataset)
-        print("Testing on training data")
-        test(model, 128, training_dataset)
-
-    print("Testing on testing data")
-    test(model, 128, testing_dataset)
-    print("Testing on training data")
-    test(model, 128, training_dataset)
+    test("testing",  model, 128, testing_dataset)
+    test("training", model, 128, training_dataset)
     sys.exit(1)
 
 

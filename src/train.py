@@ -85,6 +85,9 @@ class Model:
         self.layer4.train(learning_rate)
 
 def train(model, epoch, batch_size, learning_rate, training_input, training_output):
+    training_input  = normalize_input(training_input)
+    training_output = normalize_output(training_output)
+
     size        = len(training_input)
     batch_count = int(size / batch_size)
     for k in range(epoch):
@@ -99,21 +102,22 @@ def train(model, epoch, batch_size, learning_rate, training_input, training_outp
 
             model.train(learning_rate)
 
-def test(model, testing_input, testing_output):
+def test(title, model, testing_input, testing_output):
+    testing_input  = normalize_input(testing_input)
+    testing_output = normalize_output(testing_output)
+
     prediction = model.forward(testing_input)
 
-    real_testing_input  = (testing_input  * all_input_std)  + all_input_mean
-    real_testing_output = (testing_output * all_output_std) + all_output_mean
-    real_prediction     = (prediction     * all_output_std) + all_output_mean
+    testing_input  = denormalize_input(testing_input)
+    testing_output = denormalize_output(testing_output)
+    prediction     = denormalize_output(prediction)
 
-    for i in range(5):
-        print(f"Example: input={real_testing_input[i]}, prediction = {real_prediction[i]}, output={real_testing_output[i]}")
-
-    ss_res = np.square(real_testing_output - real_prediction).sum()
-    ss_tot = np.square(real_testing_output - real_testing_output.mean()).sum()
+    ss_res = np.square(testing_output - prediction).sum()
+    ss_tot = np.square(testing_output - testing_output.mean()).sum()
     r2 = 1 - ss_res / ss_tot
-    print(f"Testing:ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
+    print(f"Testing({title} dataset):ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
+count = all_input.shape[0]
 sub_count = int(count / 10)
 for i in range(10):
     training_input  = np.concatenate((all_input [:i*sub_count], all_input [(i+1)* sub_count:]))
@@ -122,32 +126,19 @@ for i in range(10):
     testing_input  = all_input [i * sub_count: (i+1)*sub_count]
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
 
-    # Shuffle
-    tmp = np.random.permutation(training_input.shape[0])
-    training_input  = training_input[tmp]
-    training_output = training_output[tmp]
-
-    tmp = np.random.permutation(testing_input.shape[0])
-    testing_input  = testing_input[tmp]
-    testing_output = testing_output[tmp]
-
     model = Model()
+    test("testing",  model, testing_input,  testing_output)
+    test("training", model, training_input, training_output)
 
-    print("Testing on testing data")
-    test(model, testing_input, testing_output)
-    print("Testing on training data")
-    test(model, training_input, training_output)
+    for i in range(500):
+        testing_input,  testing_output  = shuffle(testing_input,  testing_output)
+        training_input, training_output = shuffle(training_input, training_output)
 
-    while True:
-        train(model, 1, 4, 0.05, training_input, training_output)
-        print("During training - Testing on testing data")
-        test(model, testing_input, testing_output)
-        print("During training - Testing on training data")
-        test(model, training_input, training_output)
+        train(model, 1, 1, 0.05, training_input, training_output)
+        test("testing",  model, testing_input,  testing_output)
+        test("training", model, training_input, training_output)
 
-    print("Testing on testing data")
-    test(model, testing_input, testing_output)
-    print("Testing on training data")
-    test(model, training_input, training_output)
+    test("testing",  model, testing_input,  testing_output)
+    test("training", model, training_input, training_output)
     sys.exit(1)
 
