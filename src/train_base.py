@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 # Load
 with open('dataset', 'rb') as f:
-    all_input  = np.load(f, allow_pickle = True)
-    all_output = np.load(f, allow_pickle = True)
+    all_input  = np.load(f)
+    all_output = np.load(f)
 
 #tmp = np.random.randint(0, all_input.shape[0], 100)
 #all_input  = all_input[tmp]
