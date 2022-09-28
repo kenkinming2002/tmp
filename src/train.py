@@ -10,7 +10,7 @@ import math
 class DenseLayer:
     def __init__(self, input_size, output_size):
         self.weight = np.random.normal(0, math.sqrt(2.0/(input_size + output_size)), (input_size, output_size))
-        self.bias   = np.random.normal(0, 0.1, output_size)
+        self.bias   = np.zeros(output_size)
 
     def forward(self, input_value):
         self.saved_input = input_value
