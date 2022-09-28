@@ -117,6 +117,13 @@ def test(title, model, testing_input, testing_output):
     r2 = 1 - ss_res / ss_tot
     print(f"Testing({title} dataset):ss_res={ss_res}, ss_tot={ss_tot}, R2={r2}")
 
+    ##### Plotting #####
+    fig, ax = plt.subplots(1, 1)
+    ax.scatter(testing_output, prediction)
+    ax.set_xlabel("Output")
+    ax.set_ylabel("Prediction")
+    plt.show()
+
 count = all_input.shape[0]
 sub_count = int(count / 10)
 for i in range(10):

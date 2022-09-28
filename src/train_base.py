@@ -65,7 +65,6 @@ axs[5].set_title("WS")
 axs[6].set_title("PM25")
 
 plt.show()
-fig.savefig('fig.png')
 
 ##### Debugging #####
 count = all_output.shape[0]
