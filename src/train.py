@@ -2,7 +2,7 @@
 
 from tqdm import tqdm
 
-from train_base import *
+from load import *
 
 import sys
 import math
