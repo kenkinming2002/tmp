@@ -81,6 +81,8 @@ class Model:
         self.layer3 = Layer(8, 4)
         self.layer4 = Layer(4, 1)
 
+        self.gradient_log = list()
+
     def forward(self, input_value):
         output_value = input_value
         output_value = self.layer1.forward(output_value)
@@ -95,6 +97,8 @@ class Model:
         input_gradient = self.layer3.backward(input_gradient)
         input_gradient = self.layer2.backward(input_gradient)
         input_gradient = self.layer1.backward(input_gradient)
+
+        self.gradient_log.append(np.linalg.norm(input_gradient))
         return input_gradient
 
     def train(self, learning_rate):
@@ -108,6 +112,12 @@ class Model:
         self.layer2.debug()
         self.layer3.debug()
         self.layer4.debug()
+
+        gradient_log = np.array(self.gradient_log)
+        fig, ax = plt.subplots(1, 1)
+        ax.set_title("Gradient Log")
+        ax.plot(np.linspace(0, 1, gradient_log.size), gradient_log.ravel())
+        plt.show()
 
 def train(model, epoch, batch_size, learning_rate, training_input, training_output):
     training_input  = normalize_input(training_input)
@@ -168,7 +178,7 @@ for i in range(10):
         testing_input,  testing_output  = shuffle(testing_input,  testing_output)
         training_input, training_output = shuffle(training_input, training_output)
 
-        train(model, 1, 1, 0.05, training_input, training_output)
+        train(model, 1, 4, 0.05, training_input, training_output)
         test("testing",  model, testing_input,  testing_output)
         test("training", model, training_input, training_output)
 
