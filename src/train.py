@@ -137,7 +137,7 @@ def train(model, epoch, batch_size, learning_rate, training_input, training_outp
 
             model.train(learning_rate)
 
-    model.debug()
+    #model.debug()
 
 def test(title, model, testing_input, testing_output):
     testing_input  = normalize_input(testing_input)
@@ -178,7 +178,7 @@ for i in range(10):
         testing_input,  testing_output  = shuffle(testing_input,  testing_output)
         training_input, training_output = shuffle(training_input, training_output)
 
-        train(model, 1, 4, 0.05, training_input, training_output)
+        train(model, 1, 1, 0.05, training_input, training_output)
         test("testing",  model, testing_input,  testing_output)
         test("training", model, training_input, training_output)
 
