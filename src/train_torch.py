@@ -77,7 +77,7 @@ def test(title, model, batch_size, dataset):
     test_loss /= num_batches
     print(f"Test Error: \n Avg loss: {test_loss:>8f} \n")
 
-
+count = all_input.shape[0]
 sub_count = int(count / 10)
 for i in range(10):
     # Dataset
@@ -106,7 +106,7 @@ for i in range(10):
     test("training", model, 128, training_dataset)
 
     while True:
-        train(model, 1, 4, 0.05, training_dataset)
+        train(model, 1, 1, 0.05, training_dataset)
         test("testing",  model, 128, testing_dataset)
         test("training", model, 128, training_dataset)
 
