@@ -46,12 +46,9 @@ class AOD:
         tmp1 =                                                np.square(np.sin((la_data - la) * ratio / 2.0))
         tmp2 = np.cos(la_data * ratio) * np.cos(la * ratio) * np.square(np.sin((lo_data - lo) * ratio / 2.0))
         score = np.arcsin(np.sqrt(np.clip(tmp1 + tmp2, 0.0, 1.0)))
-
-        score = score[score <= AOD_THRESHOLD]
-        if score.size == 0:
+        score = np.ma.array(score, mask = score > AOD_THRESHOLD)
+        if score.mask.all():
             return None
 
-        i = np.argmin(score)
-        #print(f"Matching aod data with aod={aod_data[i]}, la={la_data[i]}, lo={lo_data[i]} to la={la} and lo={lo}")
-
+        i = np.ma.argmin(score)
         return aod_data[i]
