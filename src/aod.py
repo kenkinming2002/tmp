@@ -1,4 +1,6 @@
 from base import *
+from distance import *
+
 from tqdm import tqdm
 
 import math
@@ -38,17 +40,12 @@ class AOD:
 
     # Find aod based on la lo and time
     def get(self, la, lo, time):
-        aod_data = self.aod_data[time]
-        la_data  = self.la_data[time]
-        lo_data  = self.lo_data[time]
-
-        ratio = math.pi / 180
-        tmp1 =                                                np.square(np.sin((la_data - la) * ratio / 2.0))
-        tmp2 = np.cos(la_data * ratio) * np.cos(la * ratio) * np.square(np.sin((lo_data - lo) * ratio / 2.0))
-        score = np.arcsin(np.sqrt(np.clip(tmp1 + tmp2, 0.0, 1.0)))
-        score = np.ma.array(score, mask = score > AOD_THRESHOLD)
-        if score.mask.all():
+        distances = distance_haversine(la, lo, self.la_data[time], self.lo_data[time])
+        distances = np.ma.array(distances, mask = distances > AOD_THRESHOLD)
+        if distances.mask.all():
             return None
 
-        i = np.ma.argmin(score)
+        i = np.ma.argmin(distances)
+
+        aod_data = self.aod_data[time]
         return aod_data[i]
