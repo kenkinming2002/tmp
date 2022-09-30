@@ -30,7 +30,11 @@ class Model(nn.Module):
     def forward(self, x):
         return self.stack(x)
 
-def train(model, epochs, batch_size, learning_rate, dataset):
+def train(model, epochs, batch_size, learning_rate, training_input, training_output):
+    training_input  = normalize_input(training_input)
+    training_output = normalize_output(training_output)
+
+    dataset = TensorDataset(torch.Tensor(training_input), torch.Tensor(training_output))
     dataloader = DataLoader(dataset, batch_size = batch_size)
 
     size = len(dataloader.dataset)
@@ -38,21 +42,26 @@ def train(model, epochs, batch_size, learning_rate, dataset):
     loss_fn = nn.L1Loss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-    for batch, (X, y) in enumerate(dataloader):
-        pred = model(X)
-        loss = loss_fn(pred, y)
+    for k in range(epochs):
+        for batch, (X, y) in enumerate(dataloader):
+            pred = model(X)
+            loss = loss_fn(pred, y)
 
-        # Backpropagation
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            # Backpropagation
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-        if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(X)
-            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+            if batch % 500 == 0:
+                loss, current = loss.item(), batch * len(X)
+                print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
-def test(title, model, batch_size, dataset):
+def test(title, model, batch_size, testing_input, testing_output):
+    testing_input  = normalize_input(testing_input)
+    testing_output = normalize_output(testing_output)
+
+    dataset = TensorDataset(torch.Tensor(testing_input), torch.Tensor(testing_output))
     dataloader = DataLoader(dataset, batch_size = batch_size)
 
     size = len(dataloader.dataset)
@@ -88,30 +97,18 @@ for i in range(10):
     testing_output = all_output[i * sub_count: (i+1)*sub_count]
 
     # Shuffle
-    tmp = np.random.permutation(training_input.shape[0])
-    training_input  = training_input[tmp]
-    training_output = training_output[tmp]
-
-    tmp = np.random.permutation(testing_input.shape[0])
-    testing_input  = testing_input[tmp]
-    testing_output = testing_output[tmp]
-
-    training_dataset = TensorDataset(torch.Tensor(training_input), torch.Tensor(training_output))
-    testing_dataset  = TensorDataset(torch.Tensor(testing_input),  torch.Tensor(testing_output))
+    testing_input,  testing_output  = shuffle(testing_input,  testing_output)
+    training_input, training_output = shuffle(training_input, training_output)
 
     # Model
     model = Model()
 
-    test("testing",  model, 128, testing_dataset)
-    test("training", model, 128, training_dataset)
+    test("testing",  model, 128, testing_input, testing_output)
+    test("training", model, 128, training_input, training_output)
 
-    while True:
-        train(model, 1, 1, 0.05, training_dataset)
-        test("testing",  model, 128, testing_dataset)
-        test("training", model, 128, training_dataset)
+    train(model, 10, 4, 0.001, training_input, training_output)
 
-    test("testing",  model, 128, testing_dataset)
-    test("training", model, 128, training_dataset)
-    sys.exit(1)
+    test("testing",  model, 128, testing_input, testing_output)
+    test("training", model, 128, training_input, training_output)
 
 

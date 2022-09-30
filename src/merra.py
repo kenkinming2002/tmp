@@ -44,11 +44,7 @@ class MERRA:
         the_la = MERRA_LA_BEGIN + la_index * MERRA_LA_RESOLUTION
         the_lo = MERRA_LO_BEGIN + lo_index * MERRA_LO_RESOLUTION
 
-        ratio = math.pi / 180
-        tmp1 =                                                   math.sin((the_la - la) * ratio / 2.0) ** 2
-        tmp2 = math.cos(la * ratio) * math.cos(the_la * ratio) * math.sin((the_lo - lo) * ratio / 2.0) ** 2
-        distance = math.asin(math.sqrt(max(0.0, min(tmp1 + tmp2, 1.0))))
-
+        distance = distance_haversine(la, lo, the_la, the_lo)
         if distance > MERRA_THRESHOLD:
             return None
 
