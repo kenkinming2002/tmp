@@ -3,7 +3,7 @@ from tqdm import tqdm
 
 import math
 
-AOD_THRESHOLD = 0.001
+AOD_THRESHOLD = 0.005
 
 class AOD:
     def __init__(self):
