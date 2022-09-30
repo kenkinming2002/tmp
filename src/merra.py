@@ -31,11 +31,11 @@ class MERRA:
         hour        = time % 24
 
         date_index = date
-        la_index   = int((la - MERRA_LA_BEGIN) / MERRA_LA_RESOLUTION)
-        lo_index   = int((lo - MERRA_LO_BEGIN) / MERRA_LO_RESOLUTION)
-        hour_index = int((hour - MERRA_HOUR_BEGIN) / MERRA_HOUR_RESOLUTION)
+        la_index   = round((la - MERRA_LA_BEGIN) / MERRA_LA_RESOLUTION)
+        lo_index   = round((lo - MERRA_LO_BEGIN) / MERRA_LO_RESOLUTION)
+        hour_index = round((hour - MERRA_HOUR_BEGIN) / MERRA_HOUR_RESOLUTION) # What if hour == 0
 
-        if hour_index >= 11:
+        if hour_index >= 11 or hour_index < 0:
             return None
 
         return self.data[date_index][hour_index][la_index][lo_index]
