@@ -20,23 +20,43 @@ def shuffle(input_data, output_data):
 
 input_data, output_data = shuffle(input_data, output_data)
 
-input_min = np.amin(input_data, axis=0)
-input_max = np.amax(input_data, axis=0)
+### Min/Max
+#input_min = np.amin(input_data, axis=0)
+#input_max = np.amax(input_data, axis=0)
+#
+#output_min = np.amin(output_data, axis=0)
+#output_max = np.amax(output_data, axis=0)
+#
+#def normalize_input(data):
+#    return (data - input_min) / (input_max - input_min) * 2.0 - 1.0
+#
+#def normalize_output(data):
+#    return (data - output_min) / (output_max - output_min) * 2.0 - 1.0
+#
+#def denormalize_input(data):
+#    return (data + 1.0) / 2.0 * (input_max - input_min) + input_min
+#
+#def denormalize_output(data):
+#    return (data + 1.0) / 2.0 * (output_max - output_min) + output_min
 
-output_min = np.amin(output_data, axis=0)
-output_max = np.amax(output_data, axis=0)
+### Standardize
+input_mean  = np.mean(input_data, axis=0)
+input_std   = np.std (input_data, axis=0)
+
+output_mean = np.mean(output_data, axis=0)
+output_std  = np.std (output_data, axis=0)
 
 def normalize_input(data):
-    return (data - input_min) / (input_max - input_min) * 2.0 - 1.0
+    return (data - input_mean) / input_std
 
 def normalize_output(data):
-    return (data - output_min) / (output_max - output_min) * 2.0 - 1.0
+    return (data - output_mean) / output_std
 
 def denormalize_input(data):
-    return (data + 1.0) / 2.0 * (input_max - input_min) + input_min
+    return data * input_std + input_mean
 
 def denormalize_output(data):
-    return (data + 1.0) / 2.0 * (output_max - output_min) + output_min
+    return data * output_std + output_mean
 
 def train(model, epoch, batch_size, learning_rate, training_input, training_output):
     training_input  = normalize_input(training_input)
