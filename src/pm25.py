@@ -21,7 +21,6 @@ def load_pm25():
 
         # Mask invalid data
         mask = ~np.isnan(pm25)
-        print(np.count_nonzero(mask))
         res.append((pm25[mask], la[mask], lo[mask]))
 
     return res
