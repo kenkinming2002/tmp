@@ -11,6 +11,15 @@ output_data = np.load("stage4/output.npy")
 #input_data  = np.random.uniform(-0.2, 0.2, (50000, 6))
 #output_data = np.sum(input_data, 1, keepdims = True)
 
+def shuffle(input_data, output_data):
+    assert(input_data.shape[0] == output_data.shape[0])
+    tmp = np.random.permutation(input_data.shape[0])
+    input_data  = input_data[tmp]
+    output_data = output_data[tmp]
+    return (input_data, output_data)
+
+input_data, output_data = shuffle(input_data, output_data)
+
 input_min = np.amin(input_data, axis=0)
 input_max = np.amax(input_data, axis=0)
 
