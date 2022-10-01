@@ -28,7 +28,7 @@ def match_at(time, pbar):
         aod_indices, aod_distances         = match_scatter_scatter(pm25_la, pm25_lo, aod_la, aod_lo)
         merra_la_indices, merra_lo_indices = match_scatter_grid(pm25_la, pm25_lo, -90.0, 0.5, -180.0, 0.625)
 
-        aod_mask = aod_distances <= 100
+        aod_mask = aod_distances <= 5
 
         aod = aod_data[aod_indices][aod_mask]
 
