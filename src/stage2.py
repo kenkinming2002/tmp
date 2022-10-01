@@ -42,16 +42,16 @@ def match_at(time, pbar):
         # Saving
         os.makedirs(f"stage2/{time:0>4}", exist_ok = True)
 
-        np.save(f"stage2/{time:0>4}/AOD.npz", aod)
+        np.save(f"stage2/{time:0>4}/AOD.npy", aod)
 
-        np.save(f"stage2/{time:0>4}/PBLH.npz",  pblh)
-        np.save(f"stage2/{time:0>4}/PS.npz",    ps)
-        np.save(f"stage2/{time:0>4}/QV10M.npz", qv10m)
-        np.save(f"stage2/{time:0>4}/T2M.npz",   t2m)
-        np.save(f"stage2/{time:0>4}/U10M.npz",  u10m)
-        np.save(f"stage2/{time:0>4}/V10M.npz",  v10m)
+        np.save(f"stage2/{time:0>4}/PBLH.npy",  pblh)
+        np.save(f"stage2/{time:0>4}/PS.npy",    ps)
+        np.save(f"stage2/{time:0>4}/QV10M.npy", qv10m)
+        np.save(f"stage2/{time:0>4}/T2M.npy",   t2m)
+        np.save(f"stage2/{time:0>4}/U10M.npy",  u10m)
+        np.save(f"stage2/{time:0>4}/V10M.npy",  v10m)
 
-        np.save(f"stage2/{time:0>4}/V10M.npz",  pm25)
+        np.save(f"stage2/{time:0>4}/PM25.npy",  pm25)
     except FileNotFoundError:
         pass
 
