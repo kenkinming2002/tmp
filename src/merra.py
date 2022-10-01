@@ -5,7 +5,8 @@ from base import *
 def get_data_nc(filename, name):
     f = Dataset(filename)
     data = f[name][:]
-    return data
+    assert(not np.ma.is_masked(data))
+    return data.filled()
 
 def load_merra(dirname, name):
     def filename_as_date(filename):
