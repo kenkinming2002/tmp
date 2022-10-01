@@ -113,7 +113,7 @@ for i in range(10):
 
     #testing_input,  testing_output  = shuffle(testing_input,  testing_output)
     #training_input, training_output = shuffle(training_input, training_output)
-    train(model, 10, 1, 0.005, training_input, training_output)
+    train(model, 10, 1, 0.01, training_input, training_output)
 
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
