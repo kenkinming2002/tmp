@@ -59,6 +59,8 @@ def denormalize_output(data):
     return data * output_std + output_mean
 
 def train(model, epoch, batch_size, learning_rate, momentum, training_input, training_output):
+    training_input, training_output = shuffle(training_input, training_output)
+
     training_input  = normalize_input(training_input)
     training_output = normalize_output(training_output)
 
@@ -111,9 +113,7 @@ for i in range(10):
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
 
-    #testing_input,  testing_output  = shuffle(testing_input,  testing_output)
-    #training_input, training_output = shuffle(training_input, training_output)
-    train(model, 10, 64, 0.01, 0.9, training_input, training_output)
+    train(model, 20, 64, 0.01, 0.9, training_input, training_output)
 
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
