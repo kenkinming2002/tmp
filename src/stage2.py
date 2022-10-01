@@ -25,19 +25,21 @@ def match_at(time, pbar):
         pm25_lo   = np.load(f"stage1/{time:0>4}/PM25/lo.npy")
 
         # Matching
-        aod_indices                        = match_scatter_scatter(pm25_la, pm25_lo, aod_la, aod_lo)
+        aod_indices, aod_distances         = match_scatter_scatter(pm25_la, pm25_lo, aod_la, aod_lo)
         merra_la_indices, merra_lo_indices = match_scatter_grid(pm25_la, pm25_lo, -90.0, 0.5, -180.0, 0.625)
 
-        aod = aod_data[aod_indices]
+        aod_mask = aod_distances <= 100
 
-        pblh  = pblh_data [(merra_la_indices, merra_lo_indices)]
-        ps    = ps_data   [(merra_la_indices, merra_lo_indices)]
-        qv10m = qv10m_data[(merra_la_indices, merra_lo_indices)]
-        t2m   = t2m_data  [(merra_la_indices, merra_lo_indices)]
-        u10m  = u10m_data [(merra_la_indices, merra_lo_indices)]
-        v10m  = v10m_data [(merra_la_indices, merra_lo_indices)]
+        aod = aod_data[aod_indices][aod_mask]
 
-        pm25 = pm25_data
+        pblh  = pblh_data [(merra_la_indices, merra_lo_indices)][aod_mask]
+        ps    = ps_data   [(merra_la_indices, merra_lo_indices)][aod_mask]
+        qv10m = qv10m_data[(merra_la_indices, merra_lo_indices)][aod_mask]
+        t2m   = t2m_data  [(merra_la_indices, merra_lo_indices)][aod_mask]
+        u10m  = u10m_data [(merra_la_indices, merra_lo_indices)][aod_mask]
+        v10m  = v10m_data [(merra_la_indices, merra_lo_indices)][aod_mask]
+
+        pm25 = pm25_data[aod_mask]
 
         # Saving
         os.makedirs(f"stage2/{time:0>4}", exist_ok = True)
