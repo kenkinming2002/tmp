@@ -6,6 +6,9 @@ from pm25  import *
 
 def write_scatter(name, data_all):
     for time in range(24 * 59):
+        if data_all[time][0].size == 0:
+            continue
+
         os.makedirs(f"stage1/{time:0>4}/{name}", exist_ok = True)
         np.save    (f"stage1/{time:0>4}/{name}/data.npy", data_all[time][0])
         np.save    (f"stage1/{time:0>4}/{name}/la.npy",   data_all[time][1])
@@ -14,6 +17,9 @@ def write_scatter(name, data_all):
 
 def write_grid(name, data_all):
     for time in range(24 * 59):
+        if data_all[time] is None:
+            continue
+
         os.makedirs(f"stage1/{time:0>4}/{name}", exist_ok = True)
         np.save    (f"stage1/{time:0>4}/{name}/data.npy", data_all[time])
 
