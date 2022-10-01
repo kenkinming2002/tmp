@@ -1,8 +1,4 @@
-from tqdm import tqdm
-
-from netCDF4 import Dataset
-import numpy as np
-import os
+from base import *
 
 # Return list of scatter data indexed by time
 # Grid data indexed by [lat][lon]
