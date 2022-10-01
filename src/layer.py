@@ -5,6 +5,9 @@ class DenseLayer:
         self.weight = np.random.normal(0, math.sqrt(2.0/(input_size + output_size)), (input_size, output_size))
         self.bias   = np.zeros(output_size)
 
+        self.weight_velocity = np.zeros((input_size, output_size))
+        self.bias_velocity   = np.zeros(output_size)
+
     def forward(self, input_value):
         self.saved_input = input_value
         return np.matmul(self.saved_input, self.weight) + self.bias
@@ -15,9 +18,12 @@ class DenseLayer:
         self.bias_gradient   = np.sum(output_gradient, 0)
         return input_gradient
 
-    def train(self, learning_rate):
-        self.weight -= learning_rate * self.weight_gradient
-        self.bias   -= learning_rate * self.bias_gradient
+    def train(self, learning_rate, momentum):
+        self.weight_velocity = self.weight_velocity * momentum + self.weight_gradient * (1.0 - momentum)
+        self.bias_velocity   = self.bias_velocity   * momentum + self.bias_gradient   * (1.0 - momentum)
+
+        self.weight -= learning_rate * self.weight_velocity
+        self.bias   -= learning_rate * self.bias_velocity
 
 class ActivationLayer:
     def __init__(self):
@@ -30,7 +36,7 @@ class ActivationLayer:
     def backward(self, output_gradient):
         return output_gradient / np.square(np.cosh(self.saved_input))
 
-    def train(self, learning_rate):
+    def train(self, learning_rate, momentum):
         pass
 
 class Layer:
@@ -44,9 +50,9 @@ class Layer:
     def backward(self, output_gradient):
         return self.dense.backward(self.activation.backward(output_gradient))
 
-    def train(self, learning_rate):
-        self.dense.train(learning_rate)
-        self.activation.train(learning_rate)
+    def train(self, learning_rate, momentum):
+        self.dense.train(learning_rate, momentum)
+        self.activation.train(learning_rate, momentum)
 
 class Model:
     def __init__(self):
@@ -75,8 +81,8 @@ class Model:
         self.gradient_log.append(np.linalg.norm(input_gradient))
         return input_gradient
 
-    def train(self, learning_rate):
-        self.layer1.train(learning_rate)
-        self.layer2.train(learning_rate)
-        self.layer3.train(learning_rate)
-        self.layer4.train(learning_rate)
+    def train(self, learning_rate, momentum):
+        self.layer1.train(learning_rate, momentum)
+        self.layer2.train(learning_rate, momentum)
+        self.layer3.train(learning_rate, momentum)
+        self.layer4.train(learning_rate, momentum)

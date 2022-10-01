@@ -58,7 +58,7 @@ def denormalize_input(data):
 def denormalize_output(data):
     return data * output_std + output_mean
 
-def train(model, epoch, batch_size, learning_rate, training_input, training_output):
+def train(model, epoch, batch_size, learning_rate, momentum, training_input, training_output):
     training_input  = normalize_input(training_input)
     training_output = normalize_output(training_output)
 
@@ -74,7 +74,7 @@ def train(model, epoch, batch_size, learning_rate, training_input, training_outp
             batch_output_gradient = (batch_prediction - batch_output) * 2
             batch_input_gradient  = model.backward(batch_output_gradient)
 
-            model.train(learning_rate)
+            model.train(learning_rate, momentum)
 
 def test(title, model, testing_input, testing_output):
     testing_input  = normalize_input(testing_input)
@@ -113,7 +113,7 @@ for i in range(10):
 
     #testing_input,  testing_output  = shuffle(testing_input,  testing_output)
     #training_input, training_output = shuffle(training_input, training_output)
-    train(model, 10, 1, 0.01, training_input, training_output)
+    train(model, 10, 1, 0.01, 0.9, training_input, training_output)
 
     test("testing",  model, testing_input,  testing_output)
     test("training", model, training_input, training_output)
