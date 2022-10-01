@@ -5,3 +5,5 @@
 !requirements.txt
 !src
 !src/*
+!old_src
+!old_src/*
