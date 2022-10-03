@@ -20,6 +20,13 @@ def match_scatter_scatter(la1, lo1, la2, lo2):
 
     indices   = []
     distances = []
+
+    match_la1 = []
+    match_lo1 = []
+
+    match_la2 = []
+    match_lo2 = []
+
     for i in tqdm(range(count), desc="scatter scatter match", position=1, leave=False):
         the_la1 = la1[i]
         the_lo1 = lo1[i]
@@ -37,5 +44,11 @@ def match_scatter_scatter(la1, lo1, la2, lo2):
         indices.append(index)
         distances.append(distance)
 
-    return (np.array(indices), np.array(distances))
+        match_la1.append(the_la1)
+        match_lo1.append(the_lo1)
+
+        match_la2.append(the_la2[index])
+        match_lo2.append(the_lo2[index])
+
+    return (np.array(indices), np.array(distances), np.array(match_la1), np.array(match_lo1), np.array(match_la2), np.array(match_lo2))
 

@@ -3,6 +3,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import numpy as np
+import sys
 
 from match import *
 
@@ -25,12 +26,17 @@ def match_at(time, pbar):
         pm25_lo   = np.load(f"stage1/{time:0>4}/PM25/lo.npy")
 
         # Matching
-        aod_indices, aod_distances         = match_scatter_scatter(pm25_la, pm25_lo, aod_la, aod_lo)
+        aod_indices, aod_distances, aod_match_la1, aod_match_lo1, aod_match_la2, aod_match_lo2 = match_scatter_scatter(pm25_la, pm25_lo, aod_la, aod_lo)
         merra_la_indices, merra_lo_indices = match_scatter_grid(pm25_la, pm25_lo, -90.0, 0.5, -180.0, 0.625)
 
         aod_mask = aod_distances <= 5
 
         aod = aod_data[aod_indices][aod_mask]
+
+        aod_match_la1 = aod_match_la1[aod_mask]
+        aod_match_lo1 = aod_match_lo1[aod_mask]
+        aod_match_la2 = aod_match_la2[aod_mask]
+        aod_match_lo2 = aod_match_lo2[aod_mask]
 
         pblh  = pblh_data [(merra_la_indices, merra_lo_indices)][aod_mask]
         ps    = ps_data   [(merra_la_indices, merra_lo_indices)][aod_mask]
