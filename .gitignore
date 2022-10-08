@@ -7,3 +7,5 @@
 !src/*
 !old_src
 !old_src/*
+!results
+!results/*.tex

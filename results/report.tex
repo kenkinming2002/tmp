@@ -1,0 +1,193 @@
+\documentclass{beamer}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\title{Report}
+\author{}
+\date{}
+
+\begin{document}
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+  Following is the result from the 10 batches obtained from 10-fold cross validation,
+  varying sizes of hidden layer sizes and learning rate.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 1}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.45125 & 0.05258 \\
+    16, 8, 4   & 0.005 & 0.44746 & 0.08344 \\
+    64, 64, 64 & 0.05  & 0.72373 & -0.18942 \\
+    64, 64, 64 & 0.005 & 0.65486 & 0.040497
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 2}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.45753 & 0.27406 \\
+    16, 8, 4   & 0.005 & 0.43355 & 0.29708 \\
+    64, 64, 64 & 0.05  & 0.69242 & 0.20443 \\
+    64, 64, 64 & 0.005 & 0.65687 & 0.23860
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 3}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.47175 & 0.28569 \\
+    16, 8, 4   & 0.005 & 0.42064 & 0.23341 \\
+    64, 64, 64 & 0.05  & 0.77971 & -0.0079753 \\
+    64, 64, 64 & 0.005 & 0.65333 & 0.11909
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 4}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.42473 & 0.20823 \\
+    16, 8, 4   & 0.005 & 0.43257 & 0.25176 \\
+    64, 64, 64 & 0.05  & 0.79295 & 0.08157 \\
+    64, 64, 64 & 0.005 & 0.63254 & 0.14843
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 5}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.44238 & 0.25458 \\
+    16, 8, 4   & 0.005 & 0.45190 & 0.17408 \\
+    64, 64, 64 & 0.05  & 0.77743 & -0.16748 \\
+    64, 64, 64 & 0.005 & 0.64002 & 0.11714
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 6}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.44297 & 0.18667 \\
+    16, 8, 4   & 0.005 & 0.42599 & 0.16657 \\
+    64, 64, 64 & 0.05  & 0.75060 & -0.20655 \\
+    64, 64, 64 & 0.005 & 0.65942 & -0.10945
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 7}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.47028 & -5.2642e-05 \\
+    16, 8, 4   & 0.005 & 0.46828 & 0.10734 \\
+    64, 64, 64 & 0.05  & 0.76174 & -0.37187 \\
+    64, 64, 64 & 0.005 & 0.71088 & -0.17785
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 8}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.41757 & 0.27695 \\
+    16, 8, 4   & 0.005 & 0.42500 & 0.34487 \\
+    64, 64, 64 & 0.05  & 0.78084 & 0.01345 \\
+    64, 64, 64 & 0.005 & 0.58765 & 0.17566
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 9}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.40636 & 0.38752 \\
+    16, 8, 4   & 0.005 & 0.40824 & 0.35572 \\
+    64, 64, 64 & 0.05  & 0.76478 & 0.060279 \\
+    64, 64, 64 & 0.005 & 0.62537 & 0.18502
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Batch = 10}
+  \begin{tabular}{c c c c}
+    \parbox[t]{2.25cm}{\centering Hidden Layer \\ Sizes \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Learning     \\ Rate  \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Training     \\ Score \vspace{0.25cm}} &
+    \parbox[t]{2cm}   {\centering Testing      \\ Score \vspace{0.25cm}} \\
+    \hline
+    16, 8, 4   & 0.05  & 0.42005 & 0.25887 \\
+    16, 8, 4   & 0.005 & 0.41987 & 0.15292 \\
+    64, 64, 64 & 0.05  & 0.75910 & -0.82264 \\
+    64, 64, 64 & 0.005 & 0.65750 & -0.16581
+  \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Discussion - Changing Learning Rate}
+  Changing the learning rate
+  \begin{itemize}
+    \item In general, the effect is small
+    \item Occasionally, it is possible to improve the model performance significantly by changing the learning rate.
+    \item Suggest that learning rate tuning should not be the main concern
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Discussion - Increasing Hidden Layer Sizes}
+  \begin{itemize}
+    \item Increase training score drastically by about 0.3
+    \item Decrease testing score
+    \item Increase disparity between testing and training score, similar to overfitting
+    \item Suggest that increasing the size of hidden layers only allow the model to `memorize` more data rather than learning patterns among data
+    \item Suggest that the data is incorrectly processed and thus there is no pattern to learn
+    \item Suggest that increasing the size of hidden layers is not beneficial
+  \end{itemize}
+\end{frame}
+
+\end{document}
