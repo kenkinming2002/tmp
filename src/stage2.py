@@ -7,7 +7,7 @@ import sys
 
 from match import *
 
-def match_at(time, pbar):
+def match_at(time):
     try:
         # Loading
         aod_data = np.load(f"stage1/{time:0>4}/AOD/data.npy")
@@ -63,11 +63,14 @@ def match_at(time, pbar):
     except FileNotFoundError:
         pass
 
-    pbar.update(1)
+    #pbar.update(1)
 
-with tqdm(total=24*59, desc="Matching", position=0, leave=False) as pbar:
-    with ThreadPoolExecutor(max_workers=5) as ex:
-        futures = [ex.submit(match_at, i, pbar) for i in range(24*59)]
-        for future in as_completed(futures):
-            result = future.result()
+for i in tqdm(range(24*59), desc="Matching", position=0, leave=False):
+    match_at(i)
+
+#with tqdm(total=24*59, desc="Matching", position=0, leave=False) as pbar:
+#    with ThreadPoolExecutor(max_workers=5) as ex:
+#        futures = [ex.submit(match_at, i, pbar) for i in range(24*59)]
+#        for future in as_completed(futures):
+#            result = future.result()
 
